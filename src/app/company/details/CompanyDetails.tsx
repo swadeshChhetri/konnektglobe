@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -15,28 +15,28 @@ const dummyCompanies = [
 export default function CompanyDetails() {
 
   const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("search") || "";
-  const [companies, setCompanies] = useState<{ id: number; name: string; description: string; image: string }[]>([]);
-  const [filteredCompanies, setFilteredCompanies] = useState<{ id: number; name: string; description: string; image: string }[]>([]);
+  // const searchQuery = searchParams.get("search") || "";
+  // const [companies, setCompanies] = useState<{ id: number; name: string; description: string; image: string }[]>([]);
+  // const [filteredCompanies, setFilteredCompanies] = useState<{ id: number; name: string; description: string; image: string }[]>([]);
   const router = useRouter();
 
   // Simulate fetching companies data
-  useEffect(() => {
-    setCompanies(dummyCompanies);
-  }, []);
+  // useEffect(() => {
+  //   setCompanies(dummyCompanies);
+  // }, []);
 
   // Filter companies if a search query exists; otherwise, show all
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      setFilteredCompanies(
-        companies.filter((company) =>
-          company.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredCompanies(companies);
-    }
-  }, [searchQuery, companies]);
+  // useEffect(() => {
+  //   if (searchQuery.trim()) {
+  //     setFilteredCompanies(
+  //       companies.filter((company) =>
+  //         company.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //       )
+  //     );
+  //   } else {
+  //     setFilteredCompanies(companies);
+  //   }
+  // }, [searchQuery, companies]);
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen pt-20">

@@ -23,13 +23,13 @@ const Auth: React.FC = () => {
   });
   const router = useRouter();
 
-  const { login, register, isLoading, authToken } = useAuth();
+  const { login, register, authToken } = useAuth();
 
   useEffect(() => {
     if (authToken) {
       router.push("/");
     }
-  }, [authToken]);
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
