@@ -46,7 +46,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         email,
         password
       });
-  
+
       if (response.data.status) {
         Cookies.set("authToken", response.data.token, { expires: 7 })
         toast.success("Login successful")
@@ -56,9 +56,19 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         toast.error("Invalid login details")
       }
       console.log(response);
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Login failed.");
-      console.error("Login error:", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // Check if it's an Axios error
+        // const axiosError = error as { response?: { data?: { message?: string } } };
+
+        // toast.error(axiosError.response?.data?.message || error.message || "Login failed.");
+        console.error("Login error:", error);
+      } else {
+        toast.error("An unexpected error occurred.");
+        console.error("Unknown error:", error);
+      }
+
+
     } finally {
       setIsLoading(false)
     }
@@ -78,9 +88,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       toast.success("Registration successful! Please log in.");
       await router.push("/auth");
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Registration Error:", error);
-      toast.error(error.response?.data?.message || "Registration failed.");
+    
+      if (error instanceof Error) {
+        toast.error(error.message || "Registration failed.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }

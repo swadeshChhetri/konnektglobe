@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, X } from 'lucide-react';
+import { Eye} from 'lucide-react';
 import UserSidebar from '../../../components/UserSidebar';
 import axios from 'axios';
 import { useAuth } from '../../../context/AppProvider';
@@ -18,15 +18,25 @@ interface Product {
   status: string;
 }
 
+interface Inquiry {
+  id: number;
+  user_name: string;
+  user_email: string;
+  product_name: string;
+  message: string;
+  status: string;
+  created_at: string;
+}
+
 const Dashboard = () => {
   const { authToken } = useAuth();
-  const [active, setActive] = useState('Dashboard');
+  // const [active, setActive] = useState('Dashboard');
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedInquiry, setSelectedInquiry] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  // const [selectedInquiry, setSelectedInquiry] = useState(null);
+  // const [selectedProduct, setSelectedProduct] = useState(null);
   const [totalListedProducts, setTotalListedProducts] = useState(0);
   const [totalInquiries, setTotalInquiries] = useState(0);
-  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [userProperties, setUserProperties] = useState<Product[]>([]);
 
   // Fetch inquiries and products from API
@@ -160,7 +170,7 @@ const Dashboard = () => {
                       <td className="p-3 text-center">
                         <button
                           className="text-blue-500 hover:text-blue-700"
-                          onClick={() => setSelectedInquiry(inq)}
+                          // onClick={() => setSelectedInquiry(inq)}
                         >
                           <Eye size={20} />
                         </button>

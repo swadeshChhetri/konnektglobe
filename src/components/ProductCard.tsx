@@ -21,10 +21,10 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, section }: ProductCardProps) => {
   const imageUrl = product.image || "https://via.placeholder.com/300";
-  const [showNumber, setShowNumber] = useState(false);
+  // const [showNumber, setShowNumber] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
 
-  const mobileNumber = "98765 43210"; // Replace with
+  // const mobileNumber = "98765 43210"; // Replace with
 
   useEffect(() => {
     const interval = setInterval(() => {

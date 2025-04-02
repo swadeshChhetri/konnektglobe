@@ -1,11 +1,21 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Search, Eye, Mail, CheckCircle, X } from 'lucide-react';
+import { Search, Eye, Mail, CheckCircle} from 'lucide-react';
 import { useState, useEffect } from 'react';
 import UserSidebar from "../../../components/UserSidebar";
 import axios from "axios";
 import { useAuth } from "../../../context/AppProvider";
+
+interface Inquiry {
+  id: number;
+  user_name: string;
+  user_email: string;
+  product_name: string;
+  message: string;
+  status: string;
+  created_at: string;
+}
 
 const InquiryHeader = () => {
   const { authToken } = useAuth();
@@ -13,10 +23,10 @@ const InquiryHeader = () => {
   const [dateFilter, setDateFilter] = useState('');
   const [productFilter, setProductFilter] = useState('');
   const [customerFilter, setCustomerFilter] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedInquiry, setSelectedInquiry] = useState(null);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedInquiry, setSelectedInquiry] = useState(null);
   const [totalInquiries, setTotalInquiries] = useState(0);
-  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
 
 
 
@@ -64,20 +74,20 @@ const InquiryHeader = () => {
     }
   }, [authToken]);
 
-  const openModal = (inquiry: any) => {
-    setSelectedInquiry(inquiry);
-    setIsModalOpen(true);
-  };
+  // const openModal = (inquiry: any) => {
+  //   setSelectedInquiry(inquiry);
+  //   setIsModalOpen(true);
+  // };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedInquiry(null);
-  };
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedInquiry(null);
+  // };
 
 
-  const metrics = [
-    { name: "Total Inquiries", value: totalInquiries },
-  ];
+  // const metrics = [
+  //   { name: "Total Inquiries", value: totalInquiries },
+  // ];
 
   return (
     <div className="flex min-h-screen bg-gray-100 pt-16">
@@ -165,7 +175,9 @@ const InquiryHeader = () => {
                   <td className="p-3 border text-yellow-500">{inquiry.status}</td>
                   <td className="p-3 border">{inquiry.created_at}</td>
                   <td className="p-3 border flex gap-2">
-                    <button className="text-blue-500" onClick={() => openModal(inquiry)}>
+                    <button className="text-blue-500" 
+                    // onClick={() => openModal(inquiry)}
+                    >
                       <Eye className="w-5 h-5" />
                     </button>
                     <button className="text-green-500">

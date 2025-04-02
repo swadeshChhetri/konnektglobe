@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
@@ -21,6 +21,7 @@ import { X} from 'lucide-react';
 import { Handshake, Wallet, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useCallback } from "react";
 
 
 type FormData = {
@@ -35,10 +36,10 @@ export default function Header() {
   const { authToken, logout } = useAuth();
   const { citiesData, selectedCity, setSelectedCity, selectedDistrict, setSelectedDistrict } = useCity();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const pathname = usePathname();
-  const isTradePage = pathname === "/BusinessProducts"; // Store condition in a variable
-  const [locationOpen, setLocationOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const pathname = usePathname();
+  // const isTradePage = pathname === "/BusinessProducts"; // Store condition in a variable
+  // const [locationOpen, setLocationOpen] = useState(false);
+  // const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
@@ -82,48 +83,52 @@ export default function Header() {
           contact_phone: "",
         });
       }
-    } catch (error: any) {
-      if (error.response?.status === 422) {
-        Object.values(error.response.data.errors).forEach((err: any) =>
-          toast.error(err[0])
-        );
+    } catch (error) { 
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 422) {
+          Object.values(error.response.data.errors).forEach((err) => {
+            if (Array.isArray(err)) toast.error(err[0]);
+          });
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
       } else {
-        toast.error("Something went wrong. Please try again.");
+        console.error("Unexpected error:", error);
+        toast.error("An unexpected error occurred.");
       }
-    }
+    };
   };
 
-
-
-  useEffect(() => {
-    if (!authToken) {
-      router.push("/auth");
-      return
-    }
-    fetchTotalUsers();
-  }, [authToken])
-
-  const fetchTotalUsers = async () => {
+  const fetchTotalUsers = useCallback(async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/count`, {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       });
-
+  
       console.log(response.data.message); // Logs: "Don't worry bro, say `All is well`"
-
+  
       // Only set userCount if it exists in response
       if (response.data.userCount !== undefined) {
         setTotalUsers(response.data.userCount);
       } else {
         console.warn("userCount is not available in the response");
       }
-
     } catch (error) {
       console.error("Error fetching total users:", error);
     }
-  };
+  }, [authToken]);
+
+  useEffect(() => {
+    if (!authToken) {
+      router.push("/auth");
+      return;
+    }
+    fetchTotalUsers();
+  }, [authToken, fetchTotalUsers, router]); 
+
+  
 
   // const handleSearch = () => {
   //   if (searchTerm) {

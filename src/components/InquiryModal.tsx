@@ -20,7 +20,7 @@ export default function InquiryFormModal({
   onClose,
 }: InquiryFormModalProps) {
   const [step, setStep] = useState(1);
-  const { authToken, logout } = useAuth();
+  const { authToken} = useAuth();
   // const [selectedOption, setSelectedOption] = useState<string>("");
   const [requirement, setRequirement] = useState('one-time');
   const [sendToOthers, setSendToOthers] = useState(false);
@@ -31,7 +31,7 @@ export default function InquiryFormModal({
   const [quantity, setQuantity] = useState(1);
   const [orderValue, setOrderValue] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState("");
+  // const [feedback, setFeedback] = useState("");
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,14 +58,14 @@ export default function InquiryFormModal({
       if (response.data.message) {
         toast.success("Inquiry submitted successfully!");
       }
-      setFeedback("Inquiry submitted successfully!");
+      // setFeedback("Inquiry submitted successfully!");
       // Optionally close the modal after a delay
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch (error) {
       console.error("Error submitting inquiry:", error);
-      setFeedback("Failed to submit inquiry. Please try again.");
+      // setFeedback("Failed to submit inquiry. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

@@ -208,7 +208,7 @@ const testimonials: Testimonial[] = [
 
 function HomePage() {
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
@@ -218,7 +218,7 @@ function HomePage() {
 
   useEffect(() => {
     setTimeout(() => {
-      setLoading(false);
+      // setLoading(false);
     }, 2000);
   }, []);
 
@@ -452,7 +452,7 @@ function HomePage() {
     }
   };
 
-  const handleScroll = (e : any) => {
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollLeft = e.currentTarget.scrollLeft;
     setCanScrollLeft(scrollLeft > 0);
   };
@@ -844,7 +844,7 @@ function HomePage() {
                 <div className="relative">
                   <Quote className="text-orange-500 w-12 h-12 absolute top-[4.25rem] left-[84%] transform -translate-x-1/2" />
                   <p className="text-gray-800 text-xl italic leading-relaxed px-6 mt-8">
-                    "{testimonials[index].feedback}"
+                  &quot;{testimonials[index].feedback}&quot;
                   </p>
                   <Quote className="text-orange-500 w-12 h-12 absolute bottom-[3.25rem] right-[95%] transform translate-x-1/2 rotate-180" />
                 </div>

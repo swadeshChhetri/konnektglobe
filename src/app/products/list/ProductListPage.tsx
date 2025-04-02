@@ -81,7 +81,7 @@ export default function ProductListPage() {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No products found for "{searchQuery}" in {selectedCity}.</p>
+          <p className="text-gray-500">No products found for &quot;{searchQuery}&quot; in {selectedCity}.</p>
         )}
       </div>
     </div>

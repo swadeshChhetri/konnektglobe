@@ -5,9 +5,22 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import SkeletonProduct from "../../components/SkeletonProduct";
 
+interface Product {
+  id?: number,
+  name: string,
+  slug: string,
+  price?: number,
+  min_order?: number,
+  unit?: string,
+  category_id?: number,
+  city?: string,
+  file?: string,
+  banner_image?: File | null
+}
+
 // Define TypeScript interface for a product
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +45,7 @@ const Products = () => {
           ? Array(8) // Show 8 skeleton loaders while loading
             .fill(null)
             .map((_, index) => <SkeletonProduct key={index} />)
-          : products.map((product: any) => (
+          : products.map((product: Product) => (
             <div key={product.id} className="border p-4 rounded shadow-sm bg-white">
               <Link href={`/products/${product.id}`}>
                 {

@@ -135,14 +135,22 @@ const PostProductForm: React.FC = () => {
           fileRef.current.value = "";
         }
       }
-    } catch (error: any) {
-      if (error.response?.status === 422) {
-        const validationErrors = error.response.data.errors;
-        Object.values(validationErrors).forEach((err: any) => {
-          toast.error(err[0]);
-        });
+    } catch (error: unknown) {
+      if (error instanceof Error && "response" in error) {
+        const axiosError = error as { response?: { status: number; data: { errors: Record<string, string[]> } } };
+    
+        if (axiosError.response?.status === 422) {
+          const validationErrors = axiosError.response.data.errors;
+          Object.values(validationErrors).forEach((err) => {
+            if (Array.isArray(err)) {
+              toast.error(err[0]);
+            }
+          });
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error("An unexpected error occurred.");
       }
       console.log(error);
     }

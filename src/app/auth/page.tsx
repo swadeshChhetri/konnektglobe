@@ -29,7 +29,7 @@ const Auth: React.FC = () => {
     if (authToken) {
       router.push("/");
     }
-  }, [router]);
+  }, [authToken, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

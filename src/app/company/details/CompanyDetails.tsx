@@ -1,20 +1,20 @@
 'use client';
 // import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Briefcase, Users, Eye, CheckCircle } from 'lucide-react';
 
 // Dummy companies data for testing and dynamic loading
-const dummyCompanies = [
-  { id: 1, name: "Apple", description: "Technology & Gadgets", image: "/apple.jpg" },
-  { id: 2, name: "Nike", description: "Sports & Fashion", image: "/nike.jpg" },
-  { id: 3, name: "Samsung", description: "Electronics & Smartphones", image: "/samsung.jpg" },
-];
+// const dummyCompanies = [
+//   { id: 1, name: "Apple", description: "Technology & Gadgets", image: "/apple.jpg" },
+//   { id: 2, name: "Nike", description: "Sports & Fashion", image: "/nike.jpg" },
+//   { id: 3, name: "Samsung", description: "Electronics & Smartphones", image: "/samsung.jpg" },
+// ];
 
 export default function CompanyDetails() {
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   // const searchQuery = searchParams.get("search") || "";
   // const [companies, setCompanies] = useState<{ id: number; name: string; description: string; image: string }[]>([]);
   // const [filteredCompanies, setFilteredCompanies] = useState<{ id: number; name: string; description: string; image: string }[]>([]);

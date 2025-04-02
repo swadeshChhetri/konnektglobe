@@ -13,7 +13,7 @@ interface Seller {
 }
 
 export default function ProfileSettings() {
-  const { isLoading, authToken } = useAuth();
+  const { authToken } = useAuth();
   const [seller, setSeller] = useState<Seller>({});
 
 

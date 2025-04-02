@@ -19,7 +19,7 @@ interface Product {
 
 export default function MyListings() {
   const [userProperties, setUserProperties] = useState<Product[]>([]);
-  const { isLoading, authToken } = useAuth();
+  const { authToken } = useAuth();
   const router = useRouter();
 
   useEffect(() => {

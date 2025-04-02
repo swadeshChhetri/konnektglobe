@@ -32,7 +32,7 @@ export default function HelpSupport() {
       
       {/* Help Categories */}
       <div className="mt-10 text-center w-full max-w-5xl">
-        <h2 className="text-2xl font-semibold text-gray-700">Need help? We've got your back</h2>
+        <h2 className="text-2xl font-semibold text-gray-700">Need help&apos; We&apos;ve got your back</h2>
         <p className="text-gray-500 mt-2">Perhaps you can find the answers in our collections</p>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">

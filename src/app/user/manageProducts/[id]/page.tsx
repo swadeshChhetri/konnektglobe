@@ -4,22 +4,22 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { useAuth } from "../../../../context/AppProvider";
 
-interface Property {
-  id: string;
-  name: string;
-  price: number;
-  location: string;
-  // Add other expected fields here
-}
+// interface Property {
+//   id: string;
+//   name: string;
+//   price: number;
+//   location: string;
+//   // Add other expected fields here
+// }
 
 
 export default function PropertyDetails() {
-  const { isLoading, authToken } = useAuth();
+  const { authToken } = useAuth();
   const { id } = useParams(); // Get property ID from URL
   const router = useRouter();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal State
+  // const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal State
 
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function PropertyDetails() {
         console.error("Error fetching property:", err);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, authToken]);
 
   console.log(property);
 
@@ -86,7 +86,7 @@ export default function PropertyDetails() {
 
         {/* Edit Button */}
         <button
-          onClick={() => setIsEditModalOpen(true)}
+          // onClick={() => setIsEditModalOpen(true)}
           className="ml-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
         >
           Edit

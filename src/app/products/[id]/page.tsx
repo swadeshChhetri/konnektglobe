@@ -19,9 +19,9 @@ const ProductDetails = () => {
   // const router = useRouter(); 
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
-  const [seller, setSeller] = useState(null);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
+  // const [seller, setSeller] = useState(null);
 
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const ProductDetails = () => {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.id}`); 
         console.log(response);
         setProduct(response.data.product);
-        setSeller(response.data.seller);
+        // setSeller(response.data.seller);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -40,7 +40,7 @@ const ProductDetails = () => {
     if (authToken) {
       fetchData();
     }
-  }, [authToken]);
+  }, [authToken, params.id]);
 
   if (isLoading) {
     return (
