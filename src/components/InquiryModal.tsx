@@ -21,7 +21,7 @@ export default function InquiryFormModal({
 }: InquiryFormModalProps) {
   const [step, setStep] = useState(1);
   const { authToken, logout } = useAuth();
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  // const [selectedOption, setSelectedOption] = useState<string>("");
   const [requirement, setRequirement] = useState('one-time');
   const [sendToOthers, setSendToOthers] = useState(false);
   const [lookingForLoan, setLookingForLoan] = useState(false);

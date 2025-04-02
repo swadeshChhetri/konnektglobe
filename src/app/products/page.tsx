@@ -4,7 +4,6 @@ import Link from "next/link";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import SkeletonProduct from "../../components/SkeletonProduct";
-import Image from "next/image";
 
 // Define TypeScript interface for a product
 const Products = () => {

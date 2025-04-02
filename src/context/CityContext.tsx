@@ -1,9 +1,20 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
-const CityContext = createContext(null);
+interface CityProviderProps {
+  children: ReactNode;
+}
 
-export function CityProvider({ children }) {
+const CityContext = createContext<{
+  citiesData: { name: string; districts: string[] }[];
+  selectedCity: string;
+  setSelectedCity: React.Dispatch<React.SetStateAction<string>>;
+  selectedDistrict: string;
+  setSelectedDistrict: React.Dispatch<React.SetStateAction<string>>;
+} | null>(null);
+
+
+export function CityProvider({ children }: CityProviderProps) {
 
   const citiesData = [
     { name: "Delhi", districts: ["Central Delhi", "South Delhi", "North Delhi"] },
@@ -23,5 +34,9 @@ export function CityProvider({ children }) {
 }
 
 export function useCity() {
-  return useContext(CityContext);
+  const context = useContext(CityContext);
+  if (!context) {
+    throw new Error("useCity must be used within a CityProvider");
+  }
+  return context;
 }

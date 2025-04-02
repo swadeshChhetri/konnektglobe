@@ -15,6 +15,12 @@ import { Landmark } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { Quote } from "lucide-react";
 
+interface Testimonial {
+  name: string;
+  company: string;
+  feedback: string;
+  image: string; // add image property
+}
 
 const products = [
   {
@@ -169,35 +175,45 @@ const homeCategories = [
   { name: "Jackets", image: "/B2B/14.jpg" },
 ];
 
-const testimonials = [
+// const testimonials = [
+//   {
+//     name: "Mr. Patel Hiren",
+//     company: "Spice Villa Export, India",
+//     feedback:
+//       "ExportersIndia portal is quite effective. I am getting a lot of orders throughout the world. I am one happy client...",
+//   },
+//   {
+//     name: "Shelly Luo",
+//     company: "Viss Lighting, China",
+//     feedback:
+//       "Viss Lighting is one of the top manufacturers in the LED display & lighting industry with over 7 years of experience...",
+//   },
+//   {
+//     name: "Jalpenkumar",
+//     company: "Bhrza Technologies Company, India",
+//     feedback:
+//       "I want to thank my Relationship Manager for his support and guidance. I believed in him and the services of your portal...",
+//   },
+// ];
+
+const testimonials: Testimonial[] = [
   {
-    name: "Mr. Patel Hiren",
-    company: "Spice Villa Export, India",
-    feedback:
-      "ExportersIndia portal is quite effective. I am getting a lot of orders throughout the world. I am one happy client...",
+    name: "John Doe",
+    company: "Acme Inc.",
+    feedback: "Great service!",
+    image: "/path/to/image.jpg",
   },
-  {
-    name: "Shelly Luo",
-    company: "Viss Lighting, China",
-    feedback:
-      "Viss Lighting is one of the top manufacturers in the LED display & lighting industry with over 7 years of experience...",
-  },
-  {
-    name: "Jalpenkumar",
-    company: "Bhrza Technologies Company, India",
-    feedback:
-      "I want to thank my Relationship Manager for his support and guidance. I believed in him and the services of your portal...",
-  },
+  // more testimonials...
 ];
 
 function HomePage() {
 
   const [loading, setLoading] = useState(true);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [direction, setDirection] = useState(1);
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
 
   useEffect(() => {
@@ -436,7 +452,7 @@ function HomePage() {
     }
   };
 
-  const handleScroll = (e) => {
+  const handleScroll = (e : any) => {
     const scrollLeft = e.currentTarget.scrollLeft;
     setCanScrollLeft(scrollLeft > 0);
   };

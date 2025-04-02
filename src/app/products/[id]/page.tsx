@@ -2,11 +2,11 @@
 
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { PhoneCall, MessageCircle } from "lucide-react";
-import ContactModal from "../../../components/ContactModal";
-import InquiryFormModal from "../../../components/InquiryModal";
+// import { useRouter } from "next/navigation";
+// import { motion } from "framer-motion";
+// import { PhoneCall, MessageCircle } from "lucide-react";
+// import ContactModal from "../../../components/ContactModal";
+// import InquiryFormModal from "../../../components/InquiryModal";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton"; 
 import "react-loading-skeleton/dist/skeleton.css"; 
@@ -16,7 +16,7 @@ import { useAuth } from "../../../context/AppProvider";
 const ProductDetails = () => {
   const params = useParams(); // Get dynamic route parameters
   const { authToken } = useAuth();
-  const router = useRouter(); 
+  // const router = useRouter(); 
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,11 +102,11 @@ const ProductDetails = () => {
       </div>
 
       {/* Middle Section: Product Details */}
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         <h1 className="text-2xl font-bold">{product.name}</h1>
         <p className="text-lg font-semibold text-gray-600">₹{product.price} INR</p>
 
-        {/* Buttons */}
+        {/* Buttons *
         <div className="flex gap-3 mt-4">
           <button className="btn btn-primary flex items-center" onClick={() => setIsModalOpen(true)}>
             <motion.span
@@ -129,7 +129,7 @@ const ProductDetails = () => {
           </button>
         </div>
 
-        {/* Product Details Table */}
+        {/* Product Details Table *
         <div className="overflow-x-auto mt-6">
           <table className="table w-full border">
             <tbody>
@@ -152,28 +152,28 @@ const ProductDetails = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
 
       {/* Right Section: Seller Details */}
-      <div className="space-y-4 p-4 border rounded-lg shadow">
+      {/* <div className="space-y-4 p-4 border rounded-lg shadow">
         <h2 className="text-xl font-semibold">Seller Details</h2>
         <p className="text-gray-600">{seller?.company_name || ""}</p>
         <p className="text-gray-500">Location: {seller?.contact_phone || "N/A"}</p>
         <p className="text-gray-600">{seller?.contact_email || ""}</p>
-      </div>
+      </div> */}
 
       {/* Contact Modal */}
-      {isModalOpen && <ContactModal mobileNumber={seller?.contact_phone || "N/A"} onClose={() => setIsModalOpen(false)} />}
+      {/* {isModalOpen && <ContactModal mobileNumber={seller?.contact_phone || "N/A"} onClose={() => setIsModalOpen(false)} />} */}
 
       {/* Inquiry Modal */}
-      {isInquiryModalOpen && (
+      {/* {isInquiryModalOpen && (
         <InquiryFormModal
           productId={product.id} // Ensure your product API provides an ID
           sellerId={product.seller_id} // Ensure your product API provides seller_id
           productName={product.name}
           onClose={() => setIsInquiryModalOpen(false)}
         />
-      )}
+      )} */}
     </div>
   );
 };

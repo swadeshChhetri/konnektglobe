@@ -3,13 +3,20 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, X } from 'lucide-react';
-import Link from 'next/link';
 import UserSidebar from '../../../components/UserSidebar';
 import axios from 'axios';
 import { useAuth } from '../../../context/AppProvider';
 import Skeleton from "react-loading-skeleton"; 
 import "react-loading-skeleton/dist/skeleton.css"; 
 
+interface Product {
+  id: number;
+  banner_image: string;
+  name: string;
+  price: number;
+  category: string;
+  status: string;
+}
 
 const Dashboard = () => {
   const { authToken } = useAuth();
@@ -20,7 +27,7 @@ const Dashboard = () => {
   const [totalListedProducts, setTotalListedProducts] = useState(0);
   const [totalInquiries, setTotalInquiries] = useState(0);
   const [inquiries, setInquiries] = useState<any[]>([]);
-  const [userProperties, setUserProperties] = useState([]);
+  const [userProperties, setUserProperties] = useState<Product[]>([]);
 
   // Fetch inquiries and products from API
   useEffect(() => {
@@ -165,7 +172,7 @@ const Dashboard = () => {
             </div>
 
             {/* Modal */}
-            {selectedInquiry && (
+            {/* {selectedInquiry && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -184,7 +191,7 @@ const Dashboard = () => {
                   <p><strong>Status:</strong> {selectedInquiry.status}</p>
                 </div>
               </motion.div>
-            )}
+            )} */}
           </div>
 
           <div className="p-6 bg-white rounded-2xl shadow-md">
@@ -218,8 +225,9 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="p-2 border">
-                        <button onClick={() => setSelectedProduct(product)}
-                        >
+                        {/* <button onClick={() => setSelectedProduct(product)}
+                        > */}
+                        <button>
                           <Eye className="w-4 h-4" /> View
                         </button>
                       </td>
@@ -229,7 +237,7 @@ const Dashboard = () => {
               </table>
             </div>
 
-            {selectedProduct && (
+            {/* {selectedProduct && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -257,7 +265,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </motion.div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

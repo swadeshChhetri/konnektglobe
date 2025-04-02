@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Head from 'next/head';
 import { CityProvider } from '../context/CityContext';
 import "./styles/globals.css";
 import {  Montserrat, Noto_Serif } from "next/font/google";

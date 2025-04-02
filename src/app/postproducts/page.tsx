@@ -65,7 +65,11 @@ const PostProductForm: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setBanner(URL.createObjectURL(file)); // Preview Image
+    if (file) {
+      setBanner(URL.createObjectURL(file)); // Preview Image
+    } else {
+      setBanner(null); // Reset banner if no file is selected
+    } // Preview Image
     setFormData((prevData) => ({
       ...prevData,
       banner_image: file // Store the actual file instead of URL
@@ -74,19 +78,19 @@ const PostProductForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
       // Validate unit
       // const allowedUnits = ["Piece", "Kg", "Meter", "Ton", "Box"];
       // if (!allowedUnits.includes(formData.unit)) {
       //   return toast.error("Invalid unit selected!");
       // }
-  
+
       // Validate category
       if (!formData.category_id) {
         return toast.error("Please select a category!");
       }
-  
+
       // Prepare form data
       const formDataToSend = new FormData();
       formDataToSend.append("name", formData.name);
@@ -96,12 +100,12 @@ const PostProductForm: React.FC = () => {
       formDataToSend.append("unit", formData.unit || "");
       formDataToSend.append("category_id", formData.category_id.toString());
       formDataToSend.append("city", formData.city || "");
-  
+
       // ✅ Ensure `banner_image` is a valid File before appending
       if (formData.banner_image instanceof File) {
         formDataToSend.append("banner_image", formData.banner_image);
       }
-  
+
       // Send request
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/products`,
@@ -113,19 +117,19 @@ const PostProductForm: React.FC = () => {
           },
         }
       );
-  
+
       // Handle success response
       if (response.data.message) {
         toast.success(response.data.message);
-  
+
         // ✅ Reset form after successful submission
         setFormData((prev) => ({
           ...prev,
           banner_image: null, // Reset image
         }));
-  
+
         setBanner(null);
-  
+
         // ✅ Ensure `fileRef.current` exists before resetting
         if (fileRef.current) {
           fileRef.current.value = "";
@@ -143,7 +147,7 @@ const PostProductForm: React.FC = () => {
       console.log(error);
     }
   };
-  
+
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-xl pt-24">

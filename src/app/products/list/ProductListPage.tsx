@@ -4,14 +4,16 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { products } from "../../data/products";
 import Link from "next/link";
-import { useCity } from "../../../context/CityContext";
 import Image from "next/image";
+import { useCity } from "@/context/CityContext";
 
 export default function ProductListPage() {
   const { selectedCity } = useCity();
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState<
+  { id: number; name: string; price: number; image: string; category: string; city: string }[]
+>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

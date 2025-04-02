@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, ArrowRight } from 'lucide-react';
 
-export default function InquiryModal({ productName = 'Unknown Product', mobileNumber, onClose }) {
+interface InquiryModalProps {
+  productName?: string;
+  mobileNumber: string;
+  onClose: () => void;
+}
+
+export default function InquiryModal({ productName = 'Unknown Product', mobileNumber, onClose }: InquiryModalProps) {
   const [step, setStep] = useState(1);
   const [selectedOption, setSelectedOption] = useState('');
 

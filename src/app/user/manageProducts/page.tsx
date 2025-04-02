@@ -6,11 +6,19 @@ import Link from "next/link";
 import axios from "axios";
 import { useAuth } from "../../../context/AppProvider";
 
+interface Product {
+  id: number;
+  banner_image: string;
+  name: string;
+  price: number;
+  category: string;
+  status: string;
+}
 
 
 
 export default function MyListings() {
-  const [userProperties, setUserProperties] = useState([]);
+  const [userProperties, setUserProperties] = useState<Product[]>([]);
   const { isLoading, authToken } = useAuth();
   const router = useRouter();
 
@@ -67,14 +75,14 @@ export default function MyListings() {
               <div key={property.id} className="bg-white shadow-md p-4 rounded-lg" onClick={() => handleClick(property.id)}>
                 <img
                   src={`https://www.tradesfairs.com/konnektglobe/public/storage/${property.banner_image}`}
-                  alt={property.title || "Property Image"}
+                  alt={property.name || "Property Image"}
                   className="w-full h-40 object-cover rounded-md"
                 />
                 <h2 className="text-xl font-bold mt-2">{property.name}</h2>
-                <p className="text-gray-600">{property.location}</p>
+                {/* <p className="text-gray-600">{property.location}</p> */}
                 <p className="text-gray-700">💰 ₹{property.price}</p>
                 {property.category && <p className="text-blue-500 text-sm">{property.category}</p>}
-                {property.property_type && <p className="text-green-500 text-sm">{property.property_type}</p>}
+                {/* {property.property_type && <p className="text-green-500 text-sm">{property.property_type}</p>} */}
               </div>
             ))}
           </div>

@@ -4,10 +4,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
-  Search,
   ShoppingCart,
   User,
-  Globe,
   MapPin,
   MoreVertical,
   ChevronDown,
@@ -18,10 +16,8 @@ import SearchBar from "./SearchBar";
 import { useCity } from "../context/CityContext";
 import axios from "axios";
 import { useAuth } from "../context/AppProvider";
-import Skeleton from "react-loading-skeleton"; // Skeleton Loader
-import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from 'framer-motion';
-import { X, Headset, CircleHelp } from 'lucide-react';
+import { X} from 'lucide-react';
 import { Handshake, Wallet, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";

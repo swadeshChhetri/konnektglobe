@@ -4,7 +4,22 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PhoneCall } from "lucide-react";
 
-const ProductCard = ({ product, section }) => {
+interface Product {
+  id: string;
+  name: string;
+  image?: string;
+  category?: string;
+  price: string;
+  originalPrice?: string;
+  discount?: string;
+}
+
+interface ProductCardProps {
+  product: Product;
+  section: string;
+}
+
+const ProductCard = ({ product, section }: ProductCardProps) => {
   const imageUrl = product.image || "https://via.placeholder.com/300";
   const [showNumber, setShowNumber] = useState(false);
   const [isShaking, setIsShaking] = useState(false);

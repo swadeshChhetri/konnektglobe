@@ -183,7 +183,7 @@ const InquiryHeader = () => {
         </div>
 
         {/* Inquiry Details Modal */}
-        {isModalOpen && selectedInquiry && (
+        {/* {isModalOpen && selectedInquiry && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center p-4">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
               <div className="flex justify-between items-center mb-4">
@@ -203,7 +203,7 @@ const InquiryHeader = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </motion.div>
     </div>
   );

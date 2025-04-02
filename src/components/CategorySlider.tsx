@@ -4,7 +4,18 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function CategorySlider({ categories }) {
+// Define the Category type
+interface Category {
+  name: string;
+  image: string;
+}
+
+// Define props for the CategorySlider component
+interface CategorySliderProps {
+  categories: Category[];
+}
+
+export default function CategorySlider({ categories }: CategorySliderProps) {
   const [index, setIndex] = useState(0);
 
   const slideLeft = () => setIndex((prev) => Math.max(prev - 1, 0));
@@ -16,8 +27,8 @@ export default function CategorySlider({ categories }) {
       <div className="relative overflow-hidden">
         <motion.div
           className="flex gap-4 w-fit"
-          animate={{ x: `-${index * 220}px` }} // Move one item at a time
-          transition={{ type: "tween", duration: 0.5 }} // Smooth transition
+          animate={{ x: `-${index * 220}px` }}
+          transition={{ type: "tween", duration: 0.5 }}
         >
           {categories.map((cat, i) => (
             <div
@@ -59,3 +70,4 @@ export default function CategorySlider({ categories }) {
     </>
   );
 }
+

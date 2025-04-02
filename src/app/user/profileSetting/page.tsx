@@ -6,11 +6,15 @@ import UserSidebar from '../../../components/UserSidebar';
 import { useAuth } from "../../../context/AppProvider";
 import axios from "axios";
 
-
+interface Seller {
+  company_name?: string;
+  contact_phone?: string;
+  contact_email?: string;
+}
 
 export default function ProfileSettings() {
   const { isLoading, authToken } = useAuth();
-  const [seller, setSeller] = useState(null);
+  const [seller, setSeller] = useState<Seller>({});
 
 
   useEffect(() => {
