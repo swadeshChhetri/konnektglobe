@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-noto-serif: "Noto Serif", serif;
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --font-montserrat: "Montserrat", sans-serif;
+    --font-noto-serif: "Noto Serif", serif;
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: "Open Sans", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+}
+
+.swiper-pagination-bullet {
+  @apply w-3 h-3 bg-gray-400 opacity-100; /* Default dot style */
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-black; /* Active dot style */
+}
