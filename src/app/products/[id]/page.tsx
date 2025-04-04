@@ -3,34 +3,63 @@
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 // import { useRouter } from "next/navigation";
-// import { motion } from "framer-motion";
-// import { PhoneCall, MessageCircle } from "lucide-react";
-// import ContactModal from "../../../components/ContactModal";
-// import InquiryFormModal from "../../../components/InquiryModal";
+import { motion } from "framer-motion";
+import { PhoneCall, MessageCircle } from "lucide-react";
+import ContactModal from "../../../components/ContactModal";
+import InquiryFormModal from "../../../components/InquiryModal";
 import axios from "axios";
-import Skeleton from "react-loading-skeleton"; 
-import "react-loading-skeleton/dist/skeleton.css"; 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { useAuth } from "../../../context/AppProvider";
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  banner_image: string;
+  video_url?: string | null;
+  description?: string;
+  specifications?: string;
+  unit: 'Piece' | 'Kg' | 'Meter' | 'Ton' | 'Box';
+  min_order: number;
+  stock_quantity?: number | null;
+  is_featured: number;
+  status: 'pending' | 'approved' | 'rejected';
+  city: string;
+  seller_id: number;
+
+  // Optional: Additional dynamic fields depending on your API
+  material?: string;
+  grade?: string;
+  voltage?: string;
+  warranty?: string;
+}
+
+interface Seller {
+  company_name: string;
+  contact_phone: string;
+  contact_email: string;
+}
 
 
 const ProductDetails = () => {
   const params = useParams(); // Get dynamic route parameters
   const { authToken } = useAuth();
   // const router = useRouter(); 
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
-  // const [seller, setSeller] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
+  const [seller, setSeller] = useState<Seller | null>(null);
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.id}`); 
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.id}`);
         console.log(response);
         setProduct(response.data.product);
-        // setSeller(response.data.seller);
+        setSeller(response.data.seller);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -74,10 +103,10 @@ const ProductDetails = () => {
           className="w-full h-96 object-cover rounded-lg shadow"
         /> */}
 
-          <video controls className="w-full h-64 rounded-lg shadow-md">
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+        <video controls className="w-full h-64 rounded-lg shadow-md">
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
         {/* <div className="mt-6">
           <h2 className="text-lg font-semibold">Product Demo Video</h2>
@@ -86,7 +115,7 @@ const ProductDetails = () => {
             Your browser does not support the video tag.
           </video>
         </div> */}
-        
+
         <div className="mt-6">
           <h2 className="text-lg font-semibold">Product Brochure</h2>
           <a
@@ -102,78 +131,81 @@ const ProductDetails = () => {
       </div>
 
       {/* Middle Section: Product Details */}
-      {/* <div className="space-y-6">
-        <h1 className="text-2xl font-bold">{product.name}</h1>
-        <p className="text-lg font-semibold text-gray-600">₹{product.price} INR</p>
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
+        <p className="text-xl text-blue-600 font-semibold">₹{product.price} / {product.unit}</p>
 
-        {/* Buttons *
-        <div className="flex gap-3 mt-4">
-          <button className="btn btn-primary flex items-center" onClick={() => setIsModalOpen(true)}>
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-4 mt-4">
+          <button
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow transition duration-200"
+            onClick={() => setIsModalOpen(true)}
+          >
             <motion.span
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ repeat: Infinity, duration: 0.5, repeatDelay: 3 }}
             >
-              <PhoneCall className="w-5 h-5 mr-2" />
+              <PhoneCall className="w-5 h-5" />
             </motion.span>
-            Contact for Seller
+            Contact Seller
           </button>
 
-          <button className="btn btn-outline flex items-center" onClick={() => setIsInquiryModalOpen(true)}>
+          <button
+            className="flex items-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 px-5 py-2 rounded-lg shadow transition duration-200"
+            onClick={() => setIsInquiryModalOpen(true)}
+          >
             <motion.span
               whileHover={{ scale: 1.2 }}
               animate={{ rotate: [0, 2, -2, 0], transition: { repeat: Infinity, duration: 1.5, ease: "easeInOut" } }}
             >
-              <MessageCircle className="w-5 h-5 mr-2" />
+              <MessageCircle className="w-5 h-5" />
             </motion.span>
             Send Inquiry
           </button>
         </div>
 
-        {/* Product Details Table *
-        <div className="overflow-x-auto mt-6">
-          <table className="table w-full border">
-            <tbody>
-              <tr>
-                <td className="font-semibold">Material</td>
-                <td>{product.material || "N/A"}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold">Automatic Grade</td>
-                <td>{product.grade || "N/A"}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold">Voltage</td>
-                <td>{product.voltage || "N/A"}</td>
-              </tr>
-              <tr>
-                <td className="font-semibold">Warranty</td>
-                <td>{product.warranty || "N/A"}</td>
-              </tr>
-            </tbody>
-          </table>
+        {/* Product Specs Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 bg-gray-50 p-4 rounded-lg shadow">
+          <div className="text-sm">
+            <p className="text-gray-500 font-medium">Material</p>
+            <p className="text-gray-800 font-semibold">{product.material || "N/A"}</p>
+          </div>
+          <div className="text-sm">
+            <p className="text-gray-500 font-medium">Automatic Grade</p>
+            <p className="text-gray-800 font-semibold">{product.grade || "N/A"}</p>
+          </div>
+          <div className="text-sm">
+            <p className="text-gray-500 font-medium">Voltage</p>
+            <p className="text-gray-800 font-semibold">{product.voltage || "N/A"}</p>
+          </div>
+          <div className="text-sm">
+            <p className="text-gray-500 font-medium">Warranty</p>
+            <p className="text-gray-800 font-semibold">{product.warranty || "N/A"}</p>
+          </div>
         </div>
-      </div> */}
+      </div>
+
 
       {/* Right Section: Seller Details */}
-      {/* <div className="space-y-4 p-4 border rounded-lg shadow">
+      <div className="space-y-4 p-4 border rounded-lg shadow">
         <h2 className="text-xl font-semibold">Seller Details</h2>
         <p className="text-gray-600">{seller?.company_name || ""}</p>
         <p className="text-gray-500">Location: {seller?.contact_phone || "N/A"}</p>
         <p className="text-gray-600">{seller?.contact_email || ""}</p>
-      </div> */}
+      </div>
 
       {/* Contact Modal */}
-      {/* {isModalOpen && <ContactModal mobileNumber={seller?.contact_phone || "N/A"} onClose={() => setIsModalOpen(false)} />} */}
+      {isModalOpen && <ContactModal mobileNumber={seller?.contact_phone || "N/A"} onClose={() => setIsModalOpen(false)} />}
 
       {/* Inquiry Modal */}
-      {/* {isInquiryModalOpen && (
+      {isInquiryModalOpen && (
         <InquiryFormModal
           productId={product.id} // Ensure your product API provides an ID
           sellerId={product.seller_id} // Ensure your product API provides seller_id
           productName={product.name}
           onClose={() => setIsInquiryModalOpen(false)}
         />
-      )} */}
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import SkeletonProduct from "../components/Skeleton";
 
 
@@ -24,6 +24,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [authToken, setAuthToken] = useState<string | null>(null)
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const publicRoutes = ["/", "/about", "/contact"]; // Define public pages
@@ -36,7 +37,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       router.push("/auth");
     }
     setIsLoading(false);
-  }, [authToken, router]); // Dependency added
+  }, [pathname]); // Dependency added
 
 
   const login = async (email: string, password: string) => {

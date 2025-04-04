@@ -175,28 +175,19 @@ const homeCategories = [
   { name: "Jackets", image: "/B2B/14.jpg" },
 ];
 
-// const testimonials = [
-//   {
-//     name: "Mr. Patel Hiren",
-//     company: "Spice Villa Export, India",
-//     feedback:
-//       "ExportersIndia portal is quite effective. I am getting a lot of orders throughout the world. I am one happy client...",
-//   },
-//   {
-//     name: "Shelly Luo",
-//     company: "Viss Lighting, China",
-//     feedback:
-//       "Viss Lighting is one of the top manufacturers in the LED display & lighting industry with over 7 years of experience...",
-//   },
-//   {
-//     name: "Jalpenkumar",
-//     company: "Bhrza Technologies Company, India",
-//     feedback:
-//       "I want to thank my Relationship Manager for his support and guidance. I believed in him and the services of your portal...",
-//   },
-// ];
-
 const testimonials: Testimonial[] = [
+  {
+    name: "John Doe",
+    company: "Acme Inc.",
+    feedback: "Great service!",
+    image: "/path/to/image.jpg",
+  },
+  {
+    name: "John Doe",
+    company: "Acme Inc.",
+    feedback: "Great service!",
+    image: "/path/to/image.jpg",
+  },
   {
     name: "John Doe",
     company: "Acme Inc.",
@@ -569,56 +560,56 @@ function HomePage() {
       </div>
 
       <div className="p-6 mt-[5rem]">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Real Estate, Building & Construction
-      </h2>
-      <div className="border border-gray-300 rounded-lg p-6 grid md:grid-cols-3 gap-6 bg-gray-50 shadow-lg">
-        <motion.div
-          className="relative col-span-1 bg-cover bg-center text-white p-8 rounded-lg flex flex-col justify-end shadow-md hover:shadow-lg transition-all duration-300"
-          style={{ backgroundImage: "url('/B2B/main.jpg')" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="bg-black bg-opacity-50 p-4 rounded-lg">
-            <p className="text-xl font-semibold">Wood and Lumber</p>
-            <p className="text-sm">Cladding Materials and Building Panels</p>
-            <p className="text-sm">Bricks & Construction Materials</p>
-            <p className="text-sm">Doors & Windows</p>
-            <Link href="/products">
-              <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition-all duration-300">
-                View All
-              </button>
-            </Link>
-          </div>
-        </motion.div>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Real Estate, Building & Construction
+        </h2>
+        <div className="border border-gray-300 rounded-lg p-6 grid md:grid-cols-3 gap-6 bg-gray-50 shadow-lg">
+          <motion.div
+            className="relative col-span-1 bg-cover bg-center text-white p-8 rounded-lg flex flex-col justify-end shadow-md hover:shadow-lg transition-all duration-300"
+            style={{ backgroundImage: "url('/B2B/main.jpg')" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="bg-black bg-opacity-50 p-4 rounded-lg">
+              <p className="text-xl font-semibold">Wood and Lumber</p>
+              <p className="text-sm">Cladding Materials and Building Panels</p>
+              <p className="text-sm">Bricks & Construction Materials</p>
+              <p className="text-sm">Doors & Windows</p>
+              <Link href="/products">
+                <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition-all duration-300">
+                  View All
+                </button>
+              </Link>
+            </div>
+          </motion.div>
 
-        <div className="col-span-2 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {categories3.map((category, index) => (
-            <motion.div
-              key={index}
-              className="border p-6 rounded-lg flex flex-col items-start gap-2 bg-white shadow-md hover:shadow-lg transition-all duration-300 hover:border-blue-500"
-              whileHover={{ scale: 1.05 }}
-            >
-              <h3 className="font-semibold text-lg text-gray-800">{category.title}</h3>
-              {category.links.map((link, i) => (
-                <p key={i} className="text-blue-500 text-sm cursor-pointer hover:underline">
-                  {link}
-                </p>
-              ))}
-              <div className="flex justify-between items-center w-full mt-2">
-                <img
-                  src={category.image}
-                  alt={category.title}
-                  className="w-16 h-16 object-cover rounded-md"
-                />
-                <ArrowRight className="text-blue-500" />
-              </div>
-            </motion.div>
-          ))}
+          <div className="col-span-2 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {categories3.map((category, index) => (
+              <motion.div
+                key={index}
+                className="border p-6 rounded-lg flex flex-col items-start gap-2 bg-white shadow-md hover:shadow-lg transition-all duration-300 hover:border-blue-500"
+                whileHover={{ scale: 1.05 }}
+              >
+                <h3 className="font-semibold text-lg text-gray-800">{category.title}</h3>
+                {category.links.map((link, i) => (
+                  <p key={i} className="text-blue-500 text-sm cursor-pointer hover:underline">
+                    {link}
+                  </p>
+                ))}
+                <div className="flex justify-between items-center w-full mt-2">
+                  <img
+                    src={category.image}
+                    alt={category.title}
+                    className="w-16 h-16 object-cover rounded-md"
+                  />
+                  <ArrowRight className="text-blue-500" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
 
       <div className="p-6 mt-[5rem]">
         <h2 className="text-2xl font-semibold mb-4">
@@ -721,25 +712,25 @@ function HomePage() {
       </div>
 
       <div className="bg-gray-100 p-6 rounded-lg shadow-md mt-[5rem]">
-      <h2 className="text-xl font-bold text-center mb-4 text-gray-800">
-        Industrial Machinery
-      </h2>
-      <div className="grid grid-cols-4 gap-6 justify-items-center mt-[5rem]">
-        {cities.map((city, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.15, boxShadow: "0px 8px 20px rgba(0, 123, 255, 0.4)", transition: { duration: 0.3, ease: "easeOut" } }}
-            whileTap={{ scale: 0.95 }}
-            className="flex flex-col items-center justify-center w-24 h-24 border-2 border-gray-300 rounded-full cursor-pointer transition-all duration-300 ease-out hover:border-blue-500 hover:bg-blue-100"
-          >
-            {city.icon}
-            <span className="text-sm font-medium mt-2 text-gray-700">
-              {city.name}
-            </span>
-          </motion.div>
-        ))}
+        <h2 className="text-xl font-bold text-center mb-4 text-gray-800">
+          Industrial Machinery
+        </h2>
+        <div className="grid grid-cols-4 gap-6 justify-items-center mt-[5rem]">
+          {cities.map((city, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.15, boxShadow: "0px 8px 20px rgba(0, 123, 255, 0.4)", transition: { duration: 0.3, ease: "easeOut" } }}
+              whileTap={{ scale: 0.95 }}
+              className="flex flex-col items-center justify-center w-24 h-24 border-2 border-gray-300 rounded-full cursor-pointer transition-all duration-300 ease-out hover:border-blue-500 hover:bg-blue-100"
+            >
+              {city.icon}
+              <span className="text-sm font-medium mt-2 text-gray-700">
+                {city.name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
 
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 px-6 py-12 mt-[5rem]">
         <div className="bg-white shadow-2xl rounded-3xl flex max-w-5xl w-full overflow-hidden transform transition-all duration-500 hover:scale-[1.02]">
@@ -844,7 +835,7 @@ function HomePage() {
                 <div className="relative">
                   <Quote className="text-orange-500 w-12 h-12 absolute top-[4.25rem] left-[84%] transform -translate-x-1/2" />
                   <p className="text-gray-800 text-xl italic leading-relaxed px-6 mt-8">
-                  &quot;{testimonials[index].feedback}&quot;
+                    &quot;{testimonials[index].feedback}&quot;
                   </p>
                   <Quote className="text-orange-500 w-12 h-12 absolute bottom-[3.25rem] right-[95%] transform translate-x-1/2 rotate-180" />
                 </div>

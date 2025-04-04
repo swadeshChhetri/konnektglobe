@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useAuth } from '../../context/AppProvider';
+import { useRouter } from "next/navigation"; 
 
 interface ProductType {
   id?: number,
@@ -19,16 +20,12 @@ interface ProductType {
   banner_image?: File | null
 }
 
-
-
 const categories = [
   { id: '1', name: 'Electronics' },
   { id: '2', name: 'Clothing' },
   { id: '3', name: 'Furniture' },
   { id: '4', name: 'Toys' },
 ];
-
-
 
 const PostProductForm: React.FC = () => {
   const { authToken } = useAuth();
@@ -45,7 +42,7 @@ const PostProductForm: React.FC = () => {
     banner_image: null
   });
   const [banner, setBanner] = useState<string | null>(null);
-
+  const router = useRouter();
 
 
   useEffect(() => {
@@ -134,6 +131,8 @@ const PostProductForm: React.FC = () => {
         if (fileRef.current) {
           fileRef.current.value = "";
         }
+
+        router.push("/");
       }
     } catch (error: unknown) {
       if (error instanceof Error && "response" in error) {

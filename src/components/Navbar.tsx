@@ -1,7 +1,7 @@
 "use client";
 
 // import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   ShoppingCart,
@@ -17,7 +17,7 @@ import { useCity } from "../context/CityContext";
 import axios from "axios";
 import { useAuth } from "../context/AppProvider";
 import { motion } from 'framer-motion';
-import { X} from 'lucide-react';
+import { X } from 'lucide-react';
 import { Handshake, Wallet, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
@@ -44,7 +44,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const [showComment, setShowComment] = useState(false);
-  // const [isOpen, setIsOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
     company_name: "",
     contact_name: "",
@@ -83,7 +83,7 @@ export default function Header() {
           contact_phone: "",
         });
       }
-    } catch (error) { 
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 422) {
           Object.values(error.response.data.errors).forEach((err) => {
@@ -106,9 +106,9 @@ export default function Header() {
           Authorization: `Bearer ${authToken}`
         }
       });
-  
+
       console.log(response.data.message); // Logs: "Don't worry bro, say `All is well`"
-  
+
       // Only set userCount if it exists in response
       if (response.data.userCount !== undefined) {
         setTotalUsers(response.data.userCount);
@@ -126,9 +126,25 @@ export default function Header() {
       return;
     }
     fetchTotalUsers();
-  }, [authToken, fetchTotalUsers, router]); 
+  }, [authToken, fetchTotalUsers, router]);
 
-  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+
 
   // const handleSearch = () => {
   //   if (searchTerm) {
@@ -304,56 +320,56 @@ export default function Header() {
           {
             authToken ? (
               <div className="relative flex items-center gap-4">
-              {/* Wrapper div to handle hover */}
-              <div 
-                onMouseEnter={() => setUserMenuOpen(true)}
-                onMouseLeave={() => setUserMenuOpen(false)}
-                className="relative"
-              >
-                {/* User Icon */}
-                <User className="w-8 h-6 cursor-pointer" />
-            
-                {/* Hover Menu */}
-                {isUserMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-[1.50rem] right-[-79px] w-44 bg-white text-gray-900 p-2 shadow-xl rounded-xl flex flex-col border border-gray-200"
-                  >
-                    <Link href="/user/dashboard" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                      <Home className="w-5 h-5" />
-                      Dashboard
-                    </Link>
-                    <Link href="/pages/profile" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                      <User className="w-5 h-5" />
-                      Profile
-                    </Link>
-                    <Link href="/pages/inquiries" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                      <MessageCircle className="w-5 h-5" />
-                      Inquiries
-                    </Link>
-                    <Link href="/pages/buy-leads" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                      <ShoppingCart className="w-5 h-5" />
-                      Buy Leads
-                    </Link>
-                    <Link href="/pages/membership" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                      <BadgeCheck className="w-5 h-5" />
-                      Membership
-                    </Link>
-            
-                    <button
-                      onClick={logout}
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg text-red-600 hover:bg-red-100 transition mt-2"
+                {/* Wrapper div to handle hover */}
+                <div
+                  onMouseEnter={() => setUserMenuOpen(true)}
+                  onMouseLeave={() => setUserMenuOpen(false)}
+                  className="relative"
+                >
+                  {/* User Icon */}
+                  <User className="w-8 h-6 cursor-pointer" />
+
+                  {/* Hover Menu */}
+                  {isUserMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-[1.50rem] right-[-79px] w-44 bg-white text-gray-900 p-2 shadow-xl rounded-xl flex flex-col border border-gray-200"
                     >
-                      <LogOut className="w-5 h-5" />
-                      Sign out
-                    </button>
-                  </motion.div>
-                )}
+                      <Link href="/user/dashboard" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <Home className="w-5 h-5" />
+                        Dashboard
+                      </Link>
+                      <Link href="/pages/profile" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <User className="w-5 h-5" />
+                        Profile
+                      </Link>
+                      <Link href="/pages/inquiries" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <MessageCircle className="w-5 h-5" />
+                        Inquiries
+                      </Link>
+                      <Link href="/pages/buy-leads" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <ShoppingCart className="w-5 h-5" />
+                        Buy Leads
+                      </Link>
+                      <Link href="/pages/membership" className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        <BadgeCheck className="w-5 h-5" />
+                        Membership
+                      </Link>
+
+                      <button
+                        onClick={logout}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-red-600 hover:bg-red-100 transition mt-2"
+                      >
+                        <LogOut className="w-5 h-5" />
+                        Sign out
+                      </button>
+                    </motion.div>
+                  )}
+                </div>
               </div>
-            </div>
-            
+
             ) : (
               <>
                 <button className="font-semibold flex  rounded-xl p-1">
@@ -457,10 +473,14 @@ export default function Header() {
                 </h2>
 
                 <motion.button
+                  ref={modalRef}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="mt-4 w-full bg-blue-600 text-white font-medium py-3 rounded-lg flex justify-center items-center gap-2"
-                  onClick={() => router.push("/postproducts")}
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push("/postproducts");
+                  }}
                 >
                   Post Buy Requirement ➝
                 </motion.button>

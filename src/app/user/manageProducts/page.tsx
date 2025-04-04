@@ -8,11 +8,16 @@ import { useAuth } from "../../../context/AppProvider";
 
 interface Product {
   id: number;
-  banner_image: string;
   name: string;
+  banner_image: string;
   price: number;
+  unit: 'Piece' | 'Kg' | 'Meter' | 'Ton' | 'Box';
+  min_order: number;
+  stock_quantity: number | null;
   category: string;
-  status: string;
+  city: string;
+  is_featured: number; // 1 for true, 0 for false
+  status: 'pending' | 'approved' | 'rejected';
 }
 
 
@@ -71,21 +76,44 @@ export default function MyListings() {
         ) : (
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-24">
-            {userProperties.map((property) => (
-              <div key={property.id} className="bg-white shadow-md p-4 rounded-lg" onClick={() => handleClick(property.id)}>
+          {userProperties.map((property) => (
+            <div
+              key={property.id}
+              className="bg-white shadow-md p-4 rounded-lg cursor-pointer hover:shadow-lg transition-all"
+              onClick={() => handleClick(property.id)}
+            >
+              <div className="relative">
                 <img
                   src={`https://www.tradesfairs.com/konnektglobe/public/storage/${property.banner_image}`}
-                  alt={property.name || "Property Image"}
+                  alt={property.name || "Product Image"}
                   className="w-full h-40 object-cover rounded-md"
                 />
-                <h2 className="text-xl font-bold mt-2">{property.name}</h2>
-                {/* <p className="text-gray-600">{property.location}</p> */}
-                <p className="text-gray-700">💰 ₹{property.price}</p>
-                {property.category && <p className="text-blue-500 text-sm">{property.category}</p>}
-                {/* {property.property_type && <p className="text-green-500 text-sm">{property.property_type}</p>} */}
+                {property.is_featured === 1 && (
+                  <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
+                    Featured
+                  </span>
+                )}
               </div>
-            ))}
-          </div>
+        
+              <h2 className="text-lg font-semibold mt-3 line-clamp-1">{property.name}</h2>
+        
+              <p className="text-sm text-gray-700 mt-1">
+                ₹{property.price} / {property.unit}
+              </p>
+        
+              <p className="text-sm text-gray-500">
+                Min. Order: {property.min_order} {property.unit}(s)
+              </p>
+        
+              {property.stock_quantity !== null && (
+                <p className="text-sm text-green-600">In Stock: {property.stock_quantity}</p>
+              )}
+        
+              <p className="text-sm text-gray-500 mt-1">{property.city}</p>
+            </div>
+          ))}
+        </div>
+        
         )}
       </div>
     </div>
