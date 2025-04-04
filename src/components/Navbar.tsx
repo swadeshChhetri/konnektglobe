@@ -44,7 +44,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const [showComment, setShowComment] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLButtonElement | null>(null);
   const [formData, setFormData] = useState<FormData>({
     company_name: "",
     contact_name: "",
