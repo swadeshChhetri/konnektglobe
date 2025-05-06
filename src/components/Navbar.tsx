@@ -161,7 +161,7 @@ export default function Header() {
 
   return (
     <header className="bg-background w-full text-light fixed shadow-md z-50">
-      <nav className="flex items-center justify-between bg-dark text-light px-4 py-2 border-b shadow-sm">
+      <nav className="flex items-center justify-between bg-dark text-light px-2 py-2 border-b shadow-sm">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Link href="/" className="font-semibold text-light">
@@ -182,7 +182,7 @@ export default function Header() {
             className="flex items-center space-x-1 text-gray-600 "
           >
             <MapPin className="w-5 h-5" />
-            {selectedDistrict || selectedCity}
+           <span className="hidden md:block">{selectedDistrict || selectedCity}</span> 
             <ChevronDown className="w-4 h-4" />
           </button>
 
@@ -201,7 +201,7 @@ export default function Header() {
                       setSelectedDistrict("");
                       setDropdownOpen(false);
                     }}
-                      className="font-semibold cursor-pointer hover:bg-gray-200 p-1 rounded"
+                      className="hidden md:block font-semibold cursor-pointer hover:bg-gray-200 p-1 rounded"
                     >
 
 
@@ -232,7 +232,7 @@ export default function Header() {
         {/* Search Bar */}
         <SearchBar />
 
-        <div className="flex justify-center">
+        <div className="hidden md:block justify-center">
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             onClick={toggleModal}
@@ -372,11 +372,11 @@ export default function Header() {
 
             ) : (
               <>
-                <button className="font-semibold flex  rounded-xl p-1">
+                {/* <button className="font-semibold flex  rounded-xl p-1">
                   <Link href="/checkout">
                     <User size={20} className="" />
                   </Link>
-                </button>
+                </button> */}
                 <button className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold ">
                   <Link href="/auth">
                     Login
@@ -385,7 +385,7 @@ export default function Header() {
               </>
             )}
 
-          <div className="bg-blue-100 px-2 py-2 rounded-md text-blue-800 text-xs w-32">
+          <div className="hidden md:block bg-blue-100 px-2 py-2 rounded-md text-blue-800 text-xs w-32">
             Registered Users <br />
             <span className="text-sm">{userCount !== null ? userCount : "Loading..."}</span>
           </div>
@@ -460,7 +460,7 @@ export default function Header() {
             {/* Clickable CircleHelp Icon */}
             <button
               onClick={() => setShowComment(!showComment)}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center gap-2"
+              className="p-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition flex items-center gap-2"
             >
               <MoreVertical className="w-6 h-6" />
             </button>

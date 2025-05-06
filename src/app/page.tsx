@@ -458,7 +458,7 @@ function HomePage() {
             onMouseLeave={() => setHoveredCategory(null)}
           >
             {/* Sidebar */}
-            <div className="bg-white shadow-md p-4 rounded-[5px]">
+            <div className="hidden md:block bg-white shadow-md p-4 rounded-[5px]">
               <h2 className="text-lg font-bold mb-4">Top Categories</h2>
               <ul className="space-y-2">
                 {categories1.map((category, index) => (
@@ -732,7 +732,7 @@ function HomePage() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 px-6 py-12 mt-[5rem]">
+      <div className=" hidden md:block flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 px-6 py-12 mt-[5rem]">
         <div className="bg-white shadow-2xl rounded-3xl flex max-w-5xl w-full overflow-hidden transform transition-all duration-500 hover:scale-[1.02]">
           {/* Left Side - Animated Image & Highlights */}
           <div className="w-1/2 p-6 flex flex-col items-center justify-center relative bg-gradient-to-r from-orange-100 to-orange-300">
@@ -753,7 +753,7 @@ function HomePage() {
           </div>
 
           {/* Right Side - Form */}
-          <div className="w-1/2 p-10">
+          <div className=" w-1/2 p-10">
             <h2 className="text-2xl font-bold text-gray-800">Post Buy Requirement</h2>
             <p className="text-sm text-gray-500 mb-6">
               Tell us what you need, and we’ll help you get the best deals.
