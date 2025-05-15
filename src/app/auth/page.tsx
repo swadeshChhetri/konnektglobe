@@ -17,8 +17,8 @@ const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [formData, setFormData] = useState<formData>({
     name: '',
-    email: '',
-    password: '',
+    email: 'swadesh65@gmail.com',
+    password: 'Swadesh@65@65',
     password_confirmation: '',
   });
   const router = useRouter();
