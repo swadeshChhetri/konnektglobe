@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye} from 'lucide-react';
 import UserSidebar from '../../../components/UserSidebar';
-import axios from 'axios';
-import { useAuth } from '../../../context/AppProvider';
-import Skeleton from "react-loading-skeleton"; 
-import "react-loading-skeleton/dist/skeleton.css"; 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import api from "../../../utils/api";
+import Image from 'next/image';
 
 interface Product {
   id: number;
@@ -15,6 +14,8 @@ interface Product {
   name: string;
   price: number;
   category: string;
+  category_name: string;
+  unit: string;
   status: string;
 }
 
@@ -29,76 +30,47 @@ interface Inquiry {
 }
 
 const Dashboard = () => {
-  const { authToken } = useAuth();
-  // const [active, setActive] = useState('Dashboard');
   const [isLoading, setIsLoading] = useState(true);
-  // const [selectedInquiry, setSelectedInquiry] = useState(null);
-  // const [selectedProduct, setSelectedProduct] = useState(null);
   const [totalListedProducts, setTotalListedProducts] = useState(0);
   const [totalInquiries, setTotalInquiries] = useState(0);
+  const [totalResolved, setTotalResolved] = useState(0);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [userProperties, setUserProperties] = useState<Product[]>([]);
+  
 
   // Fetch inquiries and products from API
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        //Response 1::
-        const response1 = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/user-dashboard`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        // Response 1: Dashboard data
+        const response1 = await api.get('/user-dashboard');
         const data1 = response1.data;
-  
         setTotalListedProducts(data1.total_listed_products || 0);
         setTotalInquiries(data1.total_inquiries || 0);
-
-        //Response 2::
-        const response2 = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/showinquiries`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+  
+        // Response 2: Inquiries
+        const response2 = await api.get('/showinquiries');
         const data2 = response2.data;
         console.log("Another route data:", data2);
         setInquiries(data2);
-
-        //Response 3 ::
-        const response3 = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/user-myProducts`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            }
-          }
-        );
-
+  
+        const resolvedCount = data2.filter((inq: Inquiry) => inq.status === 'resolved').length;
+        setTotalResolved(resolvedCount);
+  
+        // Response 3: Products
+        const response3 = await api.get('/user-myProducts');
         const data3 = response3.data;
         setUserProperties(data3.products || []);
-
+  
         setIsLoading(false);
-
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
     };
   
-    if (authToken) {
-      fetchData();
-    }
-  }, [authToken]);
-
+    fetchData();
+  }, []);
+  console.log(userProperties);
 
   if (isLoading) {
     return (
@@ -127,11 +99,11 @@ const Dashboard = () => {
         <h1 className="text-3xl font-semibold mb-6">Welcome back, Swadesh 👋</h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-6 text-center">
           {[
-            { title: 'Total Products Listed', count: totalListedProducts, color: 'bg-red-200' },
-            { title: 'Total Inquiries Received', count: totalInquiries, color: 'bg-green-200' },
-            { title: 'Total Customers Reached', count: 250, color: 'bg-blue-200' },
+            { title: 'Total Products Listed', count: totalListedProducts, color: 'bg-white' },
+            { title: 'Total Inquiries Received', count: totalInquiries, color: 'bg-white' },
+            { title: 'Total Customers Reached', count: totalResolved, color: 'bg-white' },
           ].map((item, index) => (
             <motion.div
               key={index}
@@ -152,56 +124,27 @@ const Dashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-gray-100">
+                  <tr className="bg-gray-100 border">
                     <th className="p-3 text-left">Customer</th>
                     <th className="p-3 text-left">Email</th>
                     <th className="p-3 text-left">Product</th>
                     <th className="p-3 text-left">Status</th>
-                    <th className="p-3 text-center">Actions</th>
+
                   </tr>
                 </thead>
                 <tbody>
                   {inquiries.map((inq) => (
                     <tr key={inq.id} className="border-b hover:bg-gray-50">
-                      <td className="p-3">{inq.user_name}</td>
-                      <td className="p-3">{inq.user_email}</td>
-                      <td className="p-3">{inq.product_name}</td>
-                      <td className={`p-3 font-medium ${inq.status === "New" ? "text-red-500" : "text-green-500"}`}>{inq.status}</td>
-                      <td className="p-3 text-center">
-                        <button
-                          className="text-blue-500 hover:text-blue-700"
-                          // onClick={() => setSelectedInquiry(inq)}
-                        >
-                          <Eye size={20} />
-                        </button>
-                      </td>
+                      <td className="p-2 border">{inq.user_name}</td>
+                      <td className="p-2 border">{inq.user_email}</td>
+                      <td className="p-2 border">{inq.product_name}</td>
+                      <td className={`p-2 border font-medium ${inq.status === "New" ? "text-red-500" : "text-green-500"}`}>{inq.status}</td>
+
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-
-            {/* Modal */}
-            {/* {selectedInquiry && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-              >
-                <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-                  <button className="absolute top-2 right-2" onClick={() => setSelectedInquiry(null)}>
-                    <X size={24} className="text-gray-600 hover:text-gray-800" />
-                  </button>
-                  <h3 className="text-lg font-semibold mb-2">Inquiry Details</h3>
-                  <p><strong>Customer:</strong> {selectedInquiry.customer}</p>
-                  <p><strong>Product:</strong> {selectedInquiry.product}</p>
-                  <p><strong>Inquiry:</strong> {selectedInquiry.inquiry}</p>
-                  <p><strong>Date:</strong> {selectedInquiry.date}</p>
-                  <p><strong>Status:</strong> {selectedInquiry.status}</p>
-                </div>
-              </motion.div>
-            )} */}
           </div>
 
           <div className="p-6 bg-white rounded-2xl shadow-md">
@@ -209,73 +152,39 @@ const Dashboard = () => {
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
-                  <tr className="bg-gray-100 text-left">
+                  <tr className="bg-gray-100 text-left border">
                     <th className="p-2 border">Image</th>
                     <th className="p-2 border">Product Name</th>
                     <th className="p-2 border">Price</th>
                     <th className="p-2 border">Category</th>
-                    <th className="p-2 border">Status</th>
-                    <th className="p-2 border">Actions</th>
+                    <th className="p-2 border">Product_unit</th>
                   </tr>
                 </thead>
                 <tbody>
                   {userProperties.map((product) => (
                     <tr key={product.id} className="border">
                       <td className="p-2 border">
-                        <img src={`https://www.tradesfairs.com/konnektglobe/public/storage/${product.banner_image}`} alt={product.name} className="w-12 h-12 object-cover" />
+                        <Image src={`http://127.0.0.1:8000/storage/${product.banner_image}`} alt={product.name}
+                         width={500}
+                         height={300}
+                         className="w-12 h-12 object-cover" />
                       </td>
                       <td className="p-2 border">{product.name}</td>
                       <td className="p-2 border">₹{product.price}</td>
-                      <td className="p-2 border">{product.category}</td>
-                      <td className="p-2 border">
+                      <td className="p-2 border">{product.category_name}</td>
+                      <td className="p-2 border">{product.unit}</td>
+                      {/* <td className="p-2 border">
                         <span className={
                           product.status === "Active" ? "text-green-600" : "text-red-600"
                         }>
                           {product.status}
                         </span>
-                      </td>
-                      <td className="p-2 border">
-                        {/* <button onClick={() => setSelectedProduct(product)}
-                        > */}
-                        <button>
-                          <Eye className="w-4 h-4" /> View
-                        </button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-
-            {/* {selectedProduct && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-                onClick={() => setSelectedProduct(null)}
-              >
-                <div className="bg-white p-6 w-96 relative">
-                  <h3 className="text-lg font-semibold">{selectedProduct.name}</h3>
-                  <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-40 object-cover mt-2" />
-                  <div className="mt-4">
-                    <p><strong>Price:</strong> ₹{selectedProduct.price}</p>
-                    <p><strong>Min Order:</strong> {selectedProduct.minOrder} {selectedProduct.unit}</p>
-                    <p><strong>Category:</strong> {selectedProduct.category}</p>
-                    <p><strong>City:</strong> {selectedProduct.city}</p>
-                    <p>
-                      <strong>Status:</strong>
-                      <span className={selectedProduct.status === "Active" ? "text-green-600" : "text-red-600"}>
-                        {selectedProduct.status}
-                      </span>
-                    </p>
-                    <button className="mt-4" onClick={() => setSelectedProduct(null)}>
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            )} */}
           </div>
         </div>
       </div>

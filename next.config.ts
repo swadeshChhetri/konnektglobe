@@ -1,18 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["tradesfairs.com"],
+    remotePatterns: [
+      {
+        protocol: 'https', // Or 'http' if your images are served over HTTP
+        hostname: 'tradesfairs.com',
+        pathname: '**', // This allows any path under the hostname
+      },
+    ],
   }
-  // ,
-  // webpack: (config, { dev }) => {
-  //   if (dev) {
-  //     config.watchOptions = {
-  //       ignored: ["**/node_modules/**", "**/.next/**", "**/public/**"], // Ignore unnecessary paths
-  //       poll: false, // Prevents polling for file changes
-  //     };
-  //   }
-  //   return config;
-  // },
 };
 
 export default nextConfig;

@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UserSidebar from "../../../components/UserSidebar";
 import Link from "next/link";
-import axios from "axios";
 import { useAuth } from "../../../context/AppProvider";
+import api from "../../../utils/api";
+import Image from "next/image";
 
 interface Product {
   id: number;
@@ -26,42 +27,27 @@ export default function MyListings() {
   const [userProperties, setUserProperties] = useState<Product[]>([]);
   const { authToken } = useAuth();
   const router = useRouter();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/user-myProducts`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            }
-          }
-        );
-
+        const response = await api.get('/user-myProducts');
         const data = response.data;
         console.log(data);
         setUserProperties(data.products || []);
-
-
       } catch (error) {
         console.error("Error fetching myProducts data:", error);
-        setUserProperties([]); 
+        setUserProperties([]);
       }
-    }
-
+    };
+  
     if (authToken) {
       fetchData();
     }
   }, [authToken]);
-
-
-
+  
   const handleClick = (id: number) => {
     router.push(`/user/manageProducts/${id}`);
   };
-
 
   return (
     <div className="flex pt-16">
@@ -83,9 +69,10 @@ export default function MyListings() {
               onClick={() => handleClick(property.id)}
             >
               <div className="relative">
-                <img
-                  src={`https://www.tradesfairs.com/konnektglobe/public/storage/${property.banner_image}`}
+                <Image
+                  src={`http://127.0.0.1:8000/storage/${property.banner_image}`}
                   alt={property.name || "Product Image"}
+                  width={120} height={60}
                   className="w-full h-40 object-cover rounded-md"
                 />
                 {property.is_featured === 1 && (

@@ -2,15 +2,13 @@
 
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { PhoneCall, MessageCircle } from "lucide-react";
 import ContactModal from "../../../components/ContactModal";
 import InquiryFormModal from "../../../components/InquiryModal";
-import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useAuth } from "../../../context/AppProvider";
+import api from '../../../utils/api'
 
 interface Product {
   id: number;
@@ -43,11 +41,9 @@ interface Seller {
 
 
 const ProductDetails = () => {
-  const params = useParams(); // Get dynamic route parameters
-  const { authToken } = useAuth();
-  // const router = useRouter(); 
+  const params = useParams();
   const [product, setProduct] = useState<Product | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
   const [seller, setSeller] = useState<Seller | null>(null);
@@ -56,20 +52,26 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.id}`);
+        const response = await api.get(`/products/${params.id}`);
+        if (!response || !response.data) {
+          alert("No response");
+          setIsLoading(false);
+          return;
+        }
         console.log(response);
         setProduct(response.data.product);
         setSeller(response.data.seller);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Error fetching product data:", error);
+        setIsLoading(false);
       }
     };
-
-    if (authToken) {
+  
+    if (params.id) {
       fetchData();
     }
-  }, [authToken, params.id]);
+  }, [params.id]);
 
   if (isLoading) {
     return (

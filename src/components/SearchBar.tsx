@@ -20,7 +20,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="flex items-center border rounded-full px-2 py-2 w-[54%]">
+    <div className="flex items-center border rounded-full px-2 py-2">
 
       <select className="pl-1 text-sm text-light bg-dark focus:outline-none"
         value={searchType}

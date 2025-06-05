@@ -4,8 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import { useRouter, usePathname } from "next/navigation";
-import SkeletonProduct from "../components/Skeleton";
+import { useRouter} from "next/navigation";
+// import SkeletonProduct from "../components/Skeleton";
 
 
 interface AppProviderType {
@@ -24,20 +24,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [authToken, setAuthToken] = useState<string | null>(null)
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
-    const publicRoutes = ["/", "/about", "/contact"]; // Define public pages
     const token = Cookies.get("authToken");
-    const pathname = window.location.pathname;
-
     if (token) {
       setAuthToken(token);
-    } else if (!publicRoutes.includes(pathname)) {
-      router.push("/auth");
     }
     setIsLoading(false);
-  }, [pathname]); // Dependency added
+  }, []);
 
 
   const login = async (email: string, password: string) => {
@@ -59,10 +53,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(response);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        // Check if it's an Axios error
-        // const axiosError = error as { response?: { data?: { message?: string } } };
-
-        // toast.error(axiosError.response?.data?.message || error.message || "Login failed.");
         console.error("Login error:", error);
       } else {
         toast.error("An unexpected error occurred.");
@@ -91,7 +81,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     } catch (error: unknown) {
       console.log("Registration Error:", error);
-    
+
       if (error instanceof Error) {
         toast.error(error.message || "Registration failed.");
       } else {
@@ -112,7 +102,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AppContext.Provider value={{ login, register, isLoading, authToken, logout }}>
-      {isLoading ? <SkeletonProduct /> : children}
+      {children}
     </AppContext.Provider>
   );
 };

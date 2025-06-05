@@ -3,16 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
-import { useAuth } from '../../context/AppProvider';
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
+import api from '../../utils/api'; 
 
 interface ProductType {
   id?: number,
   name: string,
   slug: string,
-  price?: number,
-  min_order?: number,
+  price?: string;
+  min_order?: string;
   unit?: string,
   category_id?: number,
   city?: string,
@@ -21,20 +20,19 @@ interface ProductType {
 }
 
 const categories = [
-  { id: '1', name: 'Electronics' },
-  { id: '2', name: 'Clothing' },
-  { id: '3', name: 'Furniture' },
-  { id: '4', name: 'Toys' },
+  { id: 1, name: 'Electronics' },
+  { id: 2, name: 'Clothing' },
+  { id: 3, name: 'Furniture' },
+  { id: 4, name: 'Toys' },
 ];
 
 const PostProductForm: React.FC = () => {
-  const { authToken } = useAuth();
   const fileRef = React.useRef<HTMLInputElement>(null)
   const [formData, setFormData] = useState<ProductType>({
     name: '',
     slug: '',
-    price: 0,
-    min_order: 0,
+    price: '',
+    min_order: '',
     unit: '',
     category_id: 1,
     city: '',
@@ -55,7 +53,7 @@ const PostProductForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === 'category_id' ? Number(value) : value,
       slug: name === 'name' ? value.toLowerCase().replace(/\s+/g, '-') : prev.slug,
     }));
   };
@@ -77,11 +75,6 @@ const PostProductForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      // Validate unit
-      // const allowedUnits = ["Piece", "Kg", "Meter", "Ton", "Box"];
-      // if (!allowedUnits.includes(formData.unit)) {
-      //   return toast.error("Invalid unit selected!");
-      // }
 
       // Validate category
       if (!formData.category_id) {
@@ -104,13 +97,12 @@ const PostProductForm: React.FC = () => {
       }
 
       // Send request
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/products`,
+      const response = await api.post(
+        '/products',
         formDataToSend,
         {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         }
       );
@@ -164,13 +156,23 @@ const PostProductForm: React.FC = () => {
         <input type="text" name="slug" placeholder="Slug" value={formData.slug} className="w-full p-2 border rounded bg-gray-100" readOnly />
         <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleChange} className="w-full p-2 border rounded" required />
         <input type="number" name="min_order" placeholder="Minimum Order" value={formData.min_order} onChange={handleChange} className="w-full p-2 border rounded" required />
-        <select name="unit" value={formData.unit} onChange={handleChange} className="w-full p-2 border rounded">
-          <option>Piece</option>
-          <option>Kg</option>
-          <option>Meter</option>
-          <option>Ton</option>
-          <option>Box</option>
-        </select>
+        <select
+  name="unit"
+  value={formData.unit}
+  onChange={handleChange}
+  className="w-full p-2 border rounded"
+  required
+>
+  <option value="" disabled>
+    Select Unit
+  </option>
+  <option value="Piece">Piece</option>
+  <option value="Kg">Kg</option>
+  <option value="Meter">Meter</option>
+  <option value="Ton">Ton</option>
+  <option value="Box">Box</option>
+</select>
+        
         <select name="category_id" value={formData.category_id} onChange={handleChange} className="w-full p-2 border rounded" required>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>

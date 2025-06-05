@@ -1,10 +1,19 @@
 "use client";
 
-import { useState, useEffect  } from "react";
-import { Upload, Trash2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import UserSidebar from '../../../components/UserSidebar';
 import { useAuth } from "../../../context/AppProvider";
-import axios from "axios";
+import api from '../../../utils/api';
+import type { AxiosError } from "axios";
+import toast from "react-hot-toast";
+
+
+interface User {
+  name?: string;
+  email?: string;
+  is_seller?: boolean;
+
+}
 
 interface Seller {
   company_name?: string;
@@ -14,36 +23,47 @@ interface Seller {
 
 export default function ProfileSettings() {
   const { authToken } = useAuth();
-  const [seller, setSeller] = useState<Seller>({});
+  const [user, setUser] = useState<User | null>(null);
+  const [seller, setSeller] = useState<Seller | null>(null);
+
 
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUser = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/seller/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "Content-Type": "application/json",
-            }
-          }
-        );
-
-        const data = response.data;
-        console.log(data);
-        setSeller(response.data.seller);
-
-
-      } catch (error) {
-        console.error("Error fetching myProducts data:", error);
+        const response = await api.get('/profile');
+        setUser(response.data.user);
+      } catch (err) {
+        console.error("❌ Error fetching user profile:", err);
       }
-    }
+    };
+
+    const fetchSeller = async () => {
+      try {
+        const response = await api.get('/seller/profile');
+        if (response.data?.seller) {
+          setSeller(response.data.seller);
+        } else {
+          setSeller(null);
+        }
+      } catch (error: unknown) {
+        const axiosError = error as AxiosError;
+
+        if (axiosError.response?.status === 404) {
+          console.warn("⚠️ User is not a seller.");
+          setSeller(null);
+        } else {
+          console.error("❌ Error fetching seller profile:", axiosError);
+        }
+      }
+    };
 
     if (authToken) {
-      fetchData();
+      fetchUser();
+      fetchSeller();
     }
   }, [authToken]);
+
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,82 +73,70 @@ export default function ProfileSettings() {
     }));
   };
 
+  const handleSubmit = async () => {
+    try {
+      await api.put('/seller/profile', seller); // or another endpoint
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      toast.error('Error updating profile.');
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100 pt-16">
-      <UserSidebar/>
-    <div className="flex-1 p-6">
-      {/* Breadcrumb */}
-      <p className="text-gray-500 text-sm mb-2">Account settings / <span className="text-black font-semibold">Profile</span></p>
-      
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
-      <p className="text-gray-600 mb-6">Manage settings for your [Brand_name] profile</p>
+      <UserSidebar />
+      <div className="flex-1 p-6">
+        {/* Breadcrumb */}
+        <h1 className="text-2xl font-bold mb-4">Profile</h1>
+        {!user?.is_seller && (
+          <p className="text-red-600">You are not registered as a seller. Please register first.</p>
+        )}
 
-      {/* Profile Picture Upload */}
-      <div className="flex items-center space-x-4">
-        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-lg">
-          MA
-        </div>
-        <div>
-          <p className="text-gray-600 text-sm">We support PNGs, JPEGs, and GIFs under 10MB</p>
-          <button className="flex items-center gap-2 mt-2 px-4 py-2 text-blue-600 border border-blue-600 rounded-md">
-            <Upload size={16} /> Upload image
-          </button>
-        </div>
-      </div>
-
-      {/* Form Inputs */}
-      <div className="mt-6 space-y-4">
-        <div>
-          <label className="block text-gray-700 font-medium">Full Name</label>
-          <input
-            type="text"
-            name="fullName"
-            value={seller?.company_name || ""}
-            onChange={handleChange}
-            className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium">Mobile Number</label>
-          <input
-            type="text"
-            name="mobileNumber"
-            value={seller?.contact_phone || "N/A"}
-            onChange={handleChange}
-            className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium">Email Address</label>
-          <div className="flex items-center gap-2">
+        {/* Form Inputs */}
+        <div className="mt-6 space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium">Full Name</label>
             <input
-              type="email"
-              name="email"
-              value={seller?.contact_email || ""}
+              type="text"
+              name="company_name"
+              value={seller?.company_name || user?.name || ""}
               onChange={handleChange}
               className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md">Update e-mail</button>
           </div>
-          <p className="text-sm text-gray-500 mt-1">
-            You may need to log out and back in to see any changes.
-          </p>
+
+          <div>
+            <label className="block text-gray-700 font-medium">Mobile Number</label>
+            <input
+              type="text"
+              name="contact_phone"
+              value={seller?.contact_phone || ""}
+              onChange={handleChange}
+              className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium">Email Address</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="email"
+                name="contact_email"
+                value={seller?.contact_email || user?.email || ""}
+                onChange={handleChange}
+                className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          <button
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            onClick={handleSubmit}
+          >
+            Save Changes
+          </button>
         </div>
       </div>
-
-      {/* Danger Zone */}
-      <div className="mt-8 border-t pt-6">
-        <h2 className="text-lg font-semibold text-red-600">Danger Zone</h2>
-        <p className="text-gray-600 text-sm">
-          If you want to permanently delete this account and all of its data, you can do so below.
-        </p>
-        <button className="mt-2 flex items-center gap-2 text-red-600">
-          <Trash2 size={16} /> Delete account
-        </button>
-      </div>
-    </div>
     </div>
   );
 }

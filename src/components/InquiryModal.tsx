@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, ArrowRight, CheckCircle } from 'lucide-react';
-import axios from "axios";
-import { useAuth } from "../context/AppProvider";
 import { toast } from "react-hot-toast";
+import api from '../utils/api';
 
 interface InquiryFormModalProps {
   productId: number;
@@ -20,8 +19,6 @@ export default function InquiryFormModal({
   onClose,
 }: InquiryFormModalProps) {
   const [step, setStep] = useState(1);
-  const { authToken} = useAuth();
-  // const [selectedOption, setSelectedOption] = useState<string>("");
   const [requirement, setRequirement] = useState('one-time');
   const [sendToOthers, setSendToOthers] = useState(false);
   const [lookingForLoan, setLookingForLoan] = useState(false);
@@ -31,7 +28,6 @@ export default function InquiryFormModal({
   const [quantity, setQuantity] = useState(1);
   const [orderValue, setOrderValue] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const [feedback, setFeedback] = useState("");
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,21 +36,14 @@ export default function InquiryFormModal({
 
     try {
       // Sending inquiry data to the server
-      const response = await axios.post( `${process.env.NEXT_PUBLIC_API_URL}/inquiries`, {
+      const response = await api.post("/inquiries", {
         product_id: productId,
         user_name: buyerName,
         user_email: buyerEmail,
         message,
         quantity,
         approx_order_value: orderValue,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`, // Ensure you have authToken
-          "Content-Type": "application/json",
-        },
-      }
-      );
+      });
       if (response.data.message) {
         toast.success("Inquiry submitted successfully!");
       }
